@@ -1,0 +1,31 @@
+{
+  "name": "review_backend_api",
+  "version": "1.0.0",
+  "description": "This is the project created for Movie Review App",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Guoqing Yu",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.1.3",
+    "bcrypt": "^5.0.1",
+    "cloudinary": "^1.31.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "express-async-errors": "^3.1.1",
+    "express-validator": "^6.14.2",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.5.3",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "node-fetch": "^3.3.0",
+    "nodemailer": "^6.7.8"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  }
+}
