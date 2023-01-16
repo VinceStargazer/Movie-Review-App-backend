@@ -75,6 +75,36 @@ exports.getTrailer = async (movieId, type) => {
   return null;
 };
 
+exports.formatMovie = (movie) => {
+  const {
+    tmdb_id: id,
+    type,
+    title,
+    runtime,
+    genres,
+    releaseDate,
+    storyline,
+    reviews,
+    ratingSum,
+    directors,
+    cast,
+    poster,
+  } = movie;
+  return {
+    id,
+    type,
+    title,
+    runtime,
+    genres,
+    releaseDate,
+    storyline,
+    directors,
+    cast,
+    poster,
+    reviews: { ratingSum, reviewCount: reviews.length },
+  };
+}
+
 exports.formatMovies = async (movies, quality = "") => {
   const imagePath = quality === "original" ? TMDB_IMG_ORIGIN : TMDB_IMG_PATH;
   const results = await Promise.all(

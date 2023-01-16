@@ -5,7 +5,7 @@ const EmailVerificationToken = require("../models/emailVerificationToken");
 const PasswdResetToken = require("../models/passwdResetToken");
 const { isValidObjectId } = require("mongoose");
 const { generateOTP, createMailTransport } = require("../utils/mail");
-const { sendError, getRandomBytes, importMovie } = require("../utils/helper");
+const { sendError, getRandomBytes, importMovie, formatMovie } = require("../utils/helper");
 const Movie = require("../models/movie");
 
 exports.create = async (req, res) => {
@@ -246,6 +246,24 @@ exports.unbookmark = async (req, res) => {
   });
 };
 
+exports.getSimpleWatchlist = async (req, res) => {
+  const { type = "movie" } = req.query;
+  const userId = req.user._id;
+  const user = await User.findById(userId);
+  if (!user) return sendError(res, "User not found!", 404);
+  const watchlist = type === "movie" ? user.movieWatchList : user.tvWatchList;
+  res.json({ watchlist });
+};
+
+exports.getSimpleWatched = async (req, res) => {
+  const { type = "movie" } = req.query;
+  const userId = req.user._id;
+  const user = await User.findById(userId);
+  if (!user) return sendError(res, "User not found!", 404);
+  const watched = type === "movie" ? user.watchedMovies : user.watchedTVs;
+  res.json({ watched });
+};
+
 exports.getWatchlist = async (req, res) => {
   const { type = "movie" } = req.query;
   const userId = req.user._id;
@@ -256,7 +274,7 @@ exports.getWatchlist = async (req, res) => {
     watchlist.map(async (w) => {
       const movie = await Movie.findOne({ tmdb_id: w, type });
       if (!movie) return sendError(res, "Movie ID not found!", 404);
-      return movie;
+      return formatMovie(movie);
     })
   );
   res.json({ watchlist });
@@ -272,34 +290,7 @@ exports.getWatched = async (req, res) => {
     watched.map(async (w) => {
       const movie = await Movie.findOne({ tmdb_id: w, type });
       if (!movie) return sendError(res, "Movie not found!", 404);
-      const {
-        tmdb_id: movieId,
-        title,
-        runtime,
-        storyline,
-        reviews,
-        ratingSum,
-        directors,
-        cast,
-        poster,
-      } = movie;
-      const myReview = await Review.findOne({
-        owner: userId,
-        parentMovie: movieId,
-      });
-      return {
-        movieId,
-        type,
-        title,
-        runtime,
-        storyline,
-        reviews,
-        ratingSum,
-        directors,
-        cast,
-        poster,
-        myReview,
-      };
+      return formatMovie(movie);
     })
   );
   res.json({ watched });

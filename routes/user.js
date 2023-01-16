@@ -11,6 +11,8 @@ const {
   getWatched,
   bookmark,
   unbookmark,
+  getSimpleWatchlist,
+  getSimpleWatched,
 } = require("../controllers/user");
 const { isAuth } = require("../middlewares/auth");
 const { isValidPassResetToken } = require("../middlewares/user");
@@ -51,6 +53,8 @@ router.get("/is-auth", isAuth, (req, res) => {
 
 router.get("/watchlist", isAuth, getWatchlist);
 router.get("/watched", isAuth, getWatched);
+router.get("/watchlist-simple", isAuth, getSimpleWatchlist);
+router.get("/watched-simple", isAuth, getSimpleWatched);
 router.post("/bookmark/:movieId", isAuth, bookmark);
 router.post("/unbookmark/:movieId", isAuth, unbookmark);
 

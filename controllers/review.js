@@ -30,8 +30,9 @@ exports.addReview = async (req, res) => {
   const userId = req.user._id;
   const user = await User.findById(userId);
   if (!user) return sendError(res, "User not found!", 404);
-  if (user.watched?.includes(movieId))
-    return sendError(res, "Movie is already reviewed!");
+  const { movieWatchList, tvWatchList, watchedMovies, watchedTVs } = user;
+  if (type === "movie" && watchedMovies.includes(movieId)) return sendError(res, "Movie is already reviewed!"); 
+  if (type === "tv" && watchedTVs.includes(movieId)) return sendError(res, "TV is already reviewed!");
   let movie = await Movie.findOne({ tmdb_id: movieId, type });
   if (!movie) {
     const { error, status_message, status } = await importMovie(movieId, type);
@@ -52,12 +53,12 @@ exports.addReview = async (req, res) => {
   await movie.save();
 
   // updating reviews for the user
-  if (type === 'movie') {
-    user.watchedMovies?.push(movieId);
-    user.movieWatchList = user.movieWatchList.filter((w) => w !== movieId);
+  if (type === "movie") {
+    watchedMovies?.push(movieId);
+    user.movieWatchList = movieWatchList.filter((w) => w !== movieId);
   } else {
-    user.watchedTVs?.push(movieId);
-    user.tvWatchList = user.tvWatchList.filter((w) => w !== movieId);
+    watchedTVs?.push(movieId);
+    user.tvWatchList = tvWatchList.filter((w) => w !== movieId);
   }
 
   // saving review
@@ -142,8 +143,10 @@ exports.removeReview = async (req, res) => {
   // removing review from user
   const user = await User.findById(userId);
   if (!user) return sendError(res, "User not found!", 404);
-  if (movie.type === 'movie')
-    user.watchedMovies = user.watchedMovies?.filter((w) => w != review.parentMovie);
+  if (movie.type === "movie")
+    user.watchedMovies = user.watchedMovies?.filter(
+      (w) => w != review.parentMovie
+    );
   else
     user.watchedTVs = user.watchedTVs?.filter((w) => w != review.parentMovie);
   await user.save();
