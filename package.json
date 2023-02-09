@@ -4,7 +4,7 @@
   "description": "This is the project created for Movie Review App",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js",
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Guoqing Yu",
@@ -27,5 +27,9 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.19"
+  },
+  "engines": {
+    "node": "18.x",
+    "npm": "8.x"
   }
 }
