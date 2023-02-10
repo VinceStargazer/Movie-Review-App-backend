@@ -1,11 +1,10 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
-const Review = require("../models/review");
 const EmailVerificationToken = require("../models/emailVerificationToken");
 const PasswdResetToken = require("../models/passwdResetToken");
 const { isValidObjectId } = require("mongoose");
 const { generateOTP, createMailTransport } = require("../utils/mail");
-const { sendError, getRandomBytes, importMovie, formatMovie } = require("../utils/helper");
+const { formatMovie } = require("../utils/helper");
 const Movie = require("../models/movie");
 
 exports.create = async (req, res) => {

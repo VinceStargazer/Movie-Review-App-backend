@@ -34,7 +34,7 @@ router.post(
   update
 );
 router.delete("/:actorId", isAuth, isAdmin, remove);
-router.get("/search", isAuth, isAdmin, search);
+router.get("/search", search);
 router.get("/get-latest", isAuth, isAdmin, getLatest);
 router.get("/single/:actorId", getSingle);
 

@@ -66,10 +66,28 @@ exports.remove = async (req, res) => {
 };
 
 exports.search = async (req, res) => {
-  const { query } = req;
-  const result = await Actor.find({ $text: { $search: `"${query.name}"` } });
-  const actors = result.map((actor) => formatActor(actor));
-  res.json({ results: actors });
+  const { query = "", limit = 100 } = req.query;
+  let response;
+  try {
+    response = await axios.get(
+      `${TMDB_API_URL}/search/person?api_key=${process.env.TMDB_API_KEY}&language=en-US&query=${query}`
+    );
+  } catch (error) {
+    return sendError(res, error);
+  }
+  let results = response.data.results;
+  results = results
+    .filter((_, index) => index < limit)
+    .map((r) => {
+      const { profile_path, id, name, known_for } = r;
+      return {
+        id,
+        name,
+        profile_path,
+        known_for: known_for.length ? `${known_for[0].title} (${known_for[0].release_date?.substring(0, 4)})` : ''
+      };
+    });
+  res.json({ results });
 };
 
 exports.getLatest = async (req, res) => {

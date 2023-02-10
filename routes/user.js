@@ -12,7 +12,7 @@ const {
   bookmark,
   unbookmark,
   getSimpleWatchlist,
-  getSimpleWatched,
+  getSimpleWatched
 } = require("../controllers/user");
 const { isAuth } = require("../middlewares/auth");
 const { isValidPassResetToken } = require("../middlewares/user");

@@ -140,20 +140,31 @@ exports.getBottomRatedMovies = async (req, res) => {
   res.json(await getMoviesByAggregation(btmRatedPipeline, type, genre));
 };
 
-exports.getSearchResults = async (req, res) => {
-  const { type = "movie", text = "" } = req.query;
+exports.getMovieSearch = async (req, res) => {
+  const { type = "movie", query = "", limit = 100 } = req.query;
   let response;
   try {
     response = await axios.get(
-      `${TMDB_API_URL}/search/${type}?api_key=${process.env.TMDB_API_KEY}&query=${text}&language=en-US`
+      `${TMDB_API_URL}/search/${type}?api_key=${process.env.TMDB_API_KEY}&language=en-US&query=${query}`
     );
   } catch (error) {
-    const { response } = error;
-    const { status_message } = response?.data;
-    return sendError(res, status_message, response.status);
+    return sendError(res, error);
   }
-  const results = response.data.results;
-  res.json(await formatMovies(results));
+  let results = response.data.results;
+  results = results
+    .filter((_, index) => index < limit)
+    .map((r) => {
+      const { poster_path, id, title, name, release_date, first_air_date, genre_ids } = r;
+      return {
+        id,
+        type,
+        title: title || name,
+        poster_path,
+        genres: genre_ids,
+        release_date: release_date || first_air_date,
+      };
+    });
+  res.json({ results });
 };
 
 exports.getCredits = async (req, res) => {
