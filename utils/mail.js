@@ -31,7 +31,6 @@ exports.sendEmail = async (subject, htmlContent, email, name) => {
     name: "Movie Review App",
     email: process.env.OFFICIAL_EMAIL,
   };
-  sendSmtpEmail.templateId = 59;
   sendSmtpEmail.subject = subject;
   sendSmtpEmail.htmlContent = htmlContent;
   return await apiInstance.sendTransacEmail(sendSmtpEmail);
