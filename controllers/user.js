@@ -4,7 +4,7 @@ const EmailVerificationToken = require("../models/emailVerificationToken");
 const PasswdResetToken = require("../models/passwdResetToken");
 const { isValidObjectId } = require("mongoose");
 const { generateOTP, sendEmail } = require("../utils/mail");
-const { formatMovie, sendError } = require("../utils/helper");
+const { formatMovie, sendError, importMovie } = require("../utils/helper");
 const Movie = require("../models/movie");
 const Review = require("../models/review");
 
