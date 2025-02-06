@@ -9,7 +9,7 @@ exports.generateOTP = (len = 6) => {
 };
 
 exports.sendEmail = async (subject, htmlContent, email, name) => {
-  const defaultClient = brevo.ApiClient.instance;
+  const defaultClient = new brevo.TransactionalEmailsApi();
   const apiKey = defaultClient.authentications["api-key"];
   apiKey.apiKey = process.env.SENDIN_BLUE_KEY;
   const apiInstance = new brevo.TransactionalEmailsApi();
