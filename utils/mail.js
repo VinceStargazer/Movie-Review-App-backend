@@ -1,5 +1,4 @@
-const nodemailer = require('nodemailer');
-const SibApiV3Sdk = require("sib-api-v3-sdk");
+const brevo = require('@getbrevo/brevo');
 
 exports.generateOTP = (len = 6) => {
   let OTP = "";
@@ -9,23 +8,12 @@ exports.generateOTP = (len = 6) => {
   return OTP;
 };
 
-exports.createMailTransport = () => {
-  return nodemailer.createTransport({
-    host: "smtp.mailtrap.io",
-    port: 2525,
-    auth: {
-      user: process.env.MAILTRAP_USER,
-      pass: process.env.MAILTRAP_PASS,
-    },
-  });
-};
-
 exports.sendEmail = async (subject, htmlContent, email, name) => {
-  const defaultClient = SibApiV3Sdk.ApiClient.instance;
+  const defaultClient = brevo.ApiClient.instance;
   const apiKey = defaultClient.authentications["api-key"];
   apiKey.apiKey = process.env.SENDIN_BLUE_KEY;
-  const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
-  const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
+  const apiInstance = new brevo.TransactionalEmailsApi();
+  const sendSmtpEmail = new brevo.SendSmtpEmail();
   sendSmtpEmail.to = [{ email, name }];
   sendSmtpEmail.sender = {
     name: "Movie Review App",
