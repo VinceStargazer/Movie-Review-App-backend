@@ -1,4 +1,4 @@
-const brevo = require('@getbrevo/brevo');
+const SibApiV3Sdk = require('sib-api-v3-sdk');;
 
 exports.generateOTP = (len = 6) => {
   let OTP = "";
@@ -9,11 +9,11 @@ exports.generateOTP = (len = 6) => {
 };
 
 exports.sendEmail = async (subject, htmlContent, email, name) => {
-  const defaultClient = new brevo.TransactionalEmailsApi();
-  const apiKey = defaultClient.authentications["apiKey"];
+  const defaultClient = SibApiV3Sdk.ApiClient.instance;
+  const apiKey = defaultClient.authentications["api-key"];
   apiKey.apiKey = process.env.SENDIN_BLUE_KEY;
-  const apiInstance = new brevo.TransactionalEmailsApi();
-  const sendSmtpEmail = new brevo.SendSmtpEmail();
+  const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+  const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
   sendSmtpEmail.to = [{ email, name }];
   sendSmtpEmail.sender = {
     name: "Movie Review App",
