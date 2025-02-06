@@ -74,7 +74,7 @@ exports.reVerifyEmail = async (req, res) => {
 
   const oldToken = await EmailVerificationToken.findOne({ owner: userId });
   if (oldToken)
-    return sendError(res, "You can request another token only after one hour.");
+    return sendError(res, "You can request another token only after 3 minutes.");
 
   // store OTP inside our DB
   let OTP = generateOTP();
@@ -102,7 +102,7 @@ exports.forgetPasswd = async (req, res) => {
   const { _id, name } = user;
   const oldToken = await PasswdResetToken.findOne({ owner: _id });
   if (oldToken)
-    return sendError(res, "You can request another token only after one hour.");
+    return sendError(res, "You can request another token only after 3 minutes.");
   const token = await getRandomBytes();
 
   // store token inside our DB
