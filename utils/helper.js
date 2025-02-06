@@ -294,7 +294,7 @@ exports.importMovie = async (movieId, type) => {
     releaseDate: release_date || first_air_date,
     genres: genres.map((g) => g.id),
     languages: spoken_languages.map((l) => l.english_name),
-    runtime: runtime || episode_run_time[0],
+    runtime: runtime || (Array.isArray(episode_run_time) ? episode_run_time[0] : null),
     backdrop: TMDB_IMG_PATH + backdrop_path,
     poster: TMDB_IMG_PATH + poster_path,
     trailer: trailer_path ? YOUTUBE_PATH + trailer_path : null,
